@@ -1,0 +1,29 @@
+{
+	"events": [
+		{"date": "13.8 BYA", "title": "Big bang"},
+		{"date": "13.6 BYA", "title": "First stars"},
+		{"date": "12.7 BYA", "title": "First exoplanets"},
+		{"date": "11.7 BYA", "title": "First galaxies"},
+		{"date": "6.4 BYA", "title": "Earth-like planets form"},
+		{"date": "4.57 BYA", "title": "Sun forms"},
+		{"date": "4.56 BYA", "title": "Proto-earth forms"},
+		{"date": "4.4 BYA", "title": "Oceans on earth"},
+		{"date": "4.05 BYA", "title": "Life"},
+		{"date": "2.1 BYA", "title": "Earliest multi-cellular life"},
+		{"date": "320 MYA", "title": "First reptiles / brains?"},
+		{"date": "231 MYA", "title": "First dinosaurs"},
+		{"date": "66 MYA", "title": "Cretaceous extinction (asteroid)"},
+		{"date": "60 MYA", "title": "First primates"},
+		{"date": "6 MYA", "title": "Last common ancestor (humans & chimps)"},
+		{"date": "2.6 MYA", "title": "Australopithecus made stone tools"},
+		{"date": "2.2 MYA", "title": "First homo"},
+		{"date": "1.5 MYA", "title": "Homo erectus & First use of fire"},
+		{"date": "300 KYA", "title": "New homo sapiens fossils found in Morocco?"},
+		{"date": "160 KYA", "title": "Anatomically modern humans in Ethiopia"},
+		{"date": "120 KYA", "title": "Neanderthals & Homo Sapiens"},
+		{"date": "40 KYA", "title": "Earliest cave paintings"},
+		{"date": "12 KYA", "title": "Beginning of agriculture revolution"},
+		{"date": "10 KYA", "title": "End of ice age"},
+		{"date": "3300 YA", "title": "more advanced agriculture"}
+	]
+}

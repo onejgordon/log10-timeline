@@ -48,10 +48,11 @@
 			type: 'POST',
 			data: json_data,
 			success: function(res) {
-				console.log(res);
 				$("#result a").attr('href', "https://s3.amazonaws.com/" + res).text("Download PDF");
 				$("div#result").show();
-
+			},
+			error: function(res) {
+				alert("Error generating PDF - malformed JSON data?");
 			},
 			processData: false
 		})
@@ -180,8 +181,10 @@
 	<button class="btn btn-success" onClick="request()">Generate PDF</button>
 
 	<div id="result" style="display: none">
-		<b>Done:</b>
-		<a href="" target="_blank"></a>
+		<p>
+			<b>Done!</b><br/>
+			<a href="" target="_blank"></a>
+		</p>
 	</div>
 
 </div>

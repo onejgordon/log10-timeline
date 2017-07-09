@@ -15,3 +15,9 @@ Python script to generate log-scale PDF timelines from arbitrary event data
 * Web-app via Google cloud functions
 * Doc site
 
+## Misc
+
+### Deploying to AWS Lambda
+
+* Zip contents of root directory & upload to lambda (https://console.aws.amazon.com/lambda/home)
+* Run test function

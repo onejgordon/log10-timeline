@@ -3,7 +3,7 @@ import json
 from math import log10
 
 
-DATA_FILE = "human_brain_evolution"
+DATA_FILE = "human_evolution"
 DATA_DIR = "data"
 OUTPUT_DIR = "output"
 W = 210

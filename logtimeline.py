@@ -186,6 +186,7 @@ class LogTimeline(object):
             file_obj = StringIO.StringIO(self.pdf.output(dest='S'))  # As byte string
             filename = "%s-%s.pdf" % (self.title.replace(' ', '-'), str(self._epoch()))
             s3_client.upload_fileobj(file_obj, self.s3_bucket, filename)
+            return self.s3_bucket + '/' + filename
         else:
             self.pdf.output('%s/%s.pdf' % (OUTPUT_DIR, self.filename), dest='F')
 
@@ -198,7 +199,7 @@ class LogTimeline(object):
         self.pdf.add_page()
         self._draw_grid()
         self._draw_events()
-        self._save()
+        return self._save()
 
 if __name__ == "__main__":
     timeline = LogTimeline(filename=DATA_FILE)

@@ -39,12 +39,13 @@ class LogTimeline(object):
         self.max_ya = 0
         self.min_diff_ya = None
         self.last_event_bot_y = 0
+        self.title = None
 
     def _max_power(self):
         return int(log10(self.max_ya))
 
     def _min_power(self):
-        return 1
+        return 0
 
     def _parse_years_ago(self, date_str):
         num, unit = date_str.lower().split(' ')
@@ -52,10 +53,11 @@ class LogTimeline(object):
         if power is not None:
             return float(num) * (10 ** power)
 
-    def _load_events(self):
+    def _load_data(self):
         with open(DATA_DIR + '/' + self.filename + ".json") as f:
             data = json.load(f)
             if data:
+                self.title = data.get('title', 'Unnamed Timeline')
                 for event in data.get('events'):
                     date = event.get('date')
                     ya = self._parse_years_ago(date)
@@ -71,7 +73,9 @@ class LogTimeline(object):
             self.events.sort(key=lambda e: e.get('ya'))
             return self.events
 
-    def _ya_short(self, ya):
+    def _ya_short(self, ya, decimals=True):
+        if ya == 1:
+            return "Now"
         power = log10(ya)
         remainder = power % 3
         even_power = power - remainder
@@ -81,7 +85,9 @@ class LogTimeline(object):
             6: 'mya',
             9: 'bya'
         }.get(even_power, '--')
-        return "%.1f %s" % (10 ** remainder, unit)
+        num = 10 ** remainder
+        num_formatted = "%.1f" % num if decimals else str(int(num))
+        return num_formatted + " " + unit
 
     def _text(self, x, y, text, size=None):
         self.pdf.set_font('Arial', '', size)
@@ -90,7 +96,6 @@ class LogTimeline(object):
     def _draw_gridline(self, ya, major=False, label=None):
         y = self._y_coord(ya)
         self.pdf.set_line_width(0.5 if major else 0.2)
-
         x2 = W - MARGIN if FULL_WIDTH_GRID else MARGIN + GRID_WIDTH
         self.pdf.line(MARGIN + GRID_LABEL_WIDTH, y, x2, y)
         if major and label:
@@ -106,21 +111,23 @@ class LogTimeline(object):
 
     def _draw_grid(self):
         self.pdf.set_draw_color(230, 230, 230)
-        self._draw_gridline(0, major=True, label="Now")
+        # self._draw_gridline(0, major=True, label="Now")
         for power in range(self._min_power(), self._max_power() + 1):
             ya_step_size = 10 ** power
             for step in range(1, 10):
                 ya = step * ya_step_size
                 major = step == 1
-                self._draw_gridline(ya, major=major, label=self._ya_short(ya))
+                self._draw_gridline(ya, major=major, label=self._ya_short(ya, decimals=False))
 
     def _draw_arrow(self, y, text_y):
         '''
         Draws a horizontal line, or if text_y != y (for spacing)
         draws a 3-line segment
         '''
-        STAGGER_X1 = EVENT_LABEL_X - 25
-        STAGGER_X2 = EVENT_LABEL_X - 5
+        LINE_WIDTH = EVENT_LABEL_X - GRID_X
+        HORIZ_PCT = .2
+        STAGGER_X1 = GRID_X + HORIZ_PCT * LINE_WIDTH
+        STAGGER_X2 = GRID_X + (1 - HORIZ_PCT) * LINE_WIDTH
         WH = .6
         self.pdf.rect(GRID_X - WH/2, y - WH/2, WH, WH, 'F')
         # Horiz 1
@@ -153,9 +160,10 @@ class LogTimeline(object):
         self.pdf.output('%s/%s.pdf' % (OUTPUT_DIR, self.filename), 'F')
 
     def generate(self):
-        self._load_events()
+        self._load_data()
         H = PIXEL_GRID_SIZE * (self._max_power() + 1)
         self.pdf = FPDF(format=(W, H))
+        self.pdf.set_title(self.title)
         self.pdf.add_page()
         self._draw_grid()
         self._draw_events()

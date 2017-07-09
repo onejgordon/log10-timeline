@@ -179,7 +179,10 @@ class LogTimeline(object):
             # Upload to Amazon S3
             import boto3
             import StringIO
-            s3_client = boto3.client('s3')
+            import secrets
+            s3_client = boto3.client('s3',
+                                     aws_access_key_id=secrets.S3_USER_ACCESS_KEY,
+                                     aws_secret_access_key=secrets.S3_USER_SECRET)
             file_obj = StringIO.StringIO(self.pdf.output(dest='S'))  # As byte string
             filename = "%s-%s.pdf" % (self.title.replace(' ', '-'), str(self._epoch()))
             s3_client.upload_fileobj(file_obj, self.s3_bucket, filename)

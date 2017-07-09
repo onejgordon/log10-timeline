@@ -46,7 +46,7 @@ class LogTimeline(object):
         self.max_ya = 0
         self.min_diff_ya = None
         self.last_event_bot_y = 0
-        self.title = None
+        self.title = "untitled"
         self.s3_bucket = s3_bucket
 
     def _max_power(self):
@@ -72,7 +72,7 @@ class LogTimeline(object):
     def _process_data(self):
         if self.data:
             self.title = self.data.get('title', 'Unnamed Timeline')
-            for event in self.data.get('events'):
+            for event in self.data.get('events', []):
                 date = event.get('date')
                 ya = self._parse_years_ago(date)
                 if ya:

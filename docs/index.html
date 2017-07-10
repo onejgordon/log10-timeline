@@ -11,42 +11,44 @@ layout: default
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <script>
-	function request() {
-		var json_data = $('textarea[name=data]').val();
-		$.ajax({
-			beforeSend: function(request) {
-			    request.setRequestHeader("X-Api-Key", "L8T4oRltJQ1Fv3VR46m4r3Uwcpfj2sucaZ6SE5Oo");
-  			},
-			contentType: 'application/json',
-			url: "https://5mkmjhbm70.execute-api.us-east-1.amazonaws.com/prod/log-timeline-generate",
-			dataType: 'json',
-			type: 'POST',
-			data: json_data,
-			success: function(res) {
-				$("#result a").attr('href', "https://s3.amazonaws.com/" + res).text("Download PDF");
-				$("div#result").show();
-			},
-			error: function(res) {
-				alert("Error generating PDF - malformed JSON data?");
-			},
-			processData: false
-		})
-	}
+  function request() {
+    $("#button").prop('disabled', true);
+    var json_data = $('textarea[name=data]').val();
+    $.ajax({
+      beforeSend: function(request) {
+          request.setRequestHeader("X-Api-Key", "L8T4oRltJQ1Fv3VR46m4r3Uwcpfj2sucaZ6SE5Oo");
+        },
+      contentType: 'application/json',
+      url: "https://5mkmjhbm70.execute-api.us-east-1.amazonaws.com/prod/log-timeline-generate",
+      dataType: 'json',
+      type: 'POST',
+      data: json_data,
+      success: function(res) {
+        $("#result a").attr('href', "https://s3.amazonaws.com/" + res).text("Download PDF");
+        $("div#result").show();
+        $("#button").prop('disabled', false);
+      },
+      error: function(res) {
+        alert("Error generating PDF - malformed JSON data?");
+      },
+      processData: false
+    })
+  }
 </script>
 
 <div>
 
-	<p class="lead">There are two ways to generate timelines:</p>
-	<ol>
-		<li>Fork the repo and run the python script manually</li>
-		<li>Enter event data in JSON format in the box below, and click 'generate'</li>
-	</ol>
+  <p class="lead">There are two ways to generate timelines:</p>
+  <ol>
+    <li>Fork the repo and run the python script manually</li>
+    <li>Enter event data in JSON format in the box below, and click 'generate'</li>
+  </ol>
 
-	<label>Sample Output</label>
-	<img src="assets/images/screenshot.png" width="100%" />
+  <label>Sample Output</label>
+  <img src="assets/images/screenshot.png" width="100%" />
 
-	<label>Event Data</label>
-	<textarea name="data" class="form-control" style="height: 400px">
+  <label>Event Data</label>
+  <textarea name="data" class="form-control" style="height: 400px">
 {
   "title": "Human evolution",
   "events": [
@@ -152,14 +154,18 @@ layout: default
     }
   ]
 }
-	</textarea><br/>
-	<button class="btn btn-success" onClick="request()">Generate PDF</button>
+  </textarea><br/>
+  <button class="btn btn-success" id="button" onClick="request()">Generate PDF</button>
 
-	<div id="result" style="display: none">
-		<p style="margin-top: 10px">
-			<b>Done!</b><br/>
-			<a href="" target="_blank"></a>
-		</p>
-	</div>
+  <div id="result" style="display: none">
+    <p style="margin-top: 10px">
+      <b>Done!</b><br/>
+      <a href="" target="_blank"></a>
+    </p>
+  </div>
+
+  <h2>Contribute</h2>
+
+  <p>Want to customize the timelines? Pull requests very welcome in the repo.</p>
 
 </div>

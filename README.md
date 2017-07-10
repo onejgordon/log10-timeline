@@ -1,4 +1,4 @@
-# Log Timeline
+# Log10 Timeline
 
 Python script to generate log-scale PDF timelines from arbitrary event data
 

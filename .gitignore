@@ -2,3 +2,4 @@ secrets.py
 scripts/lambda.zip
 lambda
 *.egg-info
+*.pyc

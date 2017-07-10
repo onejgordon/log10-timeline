@@ -15,16 +15,21 @@ OUTPUT_DIR = "output"
 W = 210
 MARGIN = 10
 X_MAX = W - MARGIN
-GRID_WIDTH = 30
+GRID_WIDTH = 10
 GRID_LABEL_WIDTH = 20
 PIXEL_GRID_SIZE = 50
-FULL_WIDTH_GRID = True
 YA_LABEL_SIZE = 10
 EVENT_LABEL_SIZE = 10
 GRID_X = MARGIN + GRID_LABEL_WIDTH
-EVENT_LABEL_X = GRID_X + 30
+EVENT_LABEL_X = GRID_X + GRID_WIDTH * 3
 EVENT_LABEL_GAP = 3
 MIN_EVENT_TEXT_GAP = 5
+
+# User configurable (defaults)
+CONFIG = {
+    'FULL_WIDTH_GRID': True,
+    'NO_GRID': False
+}
 
 
 class LogTimeline(object):
@@ -37,7 +42,7 @@ class LogTimeline(object):
         'ya': 0
     }
 
-    def __init__(self, filename=None, data=None, s3_bucket=None):
+    def __init__(self, filename=None, data=None, s3_bucket=None, user_config=None):
         self.filename = filename
         self.data = data
         self.events = []
@@ -48,6 +53,9 @@ class LogTimeline(object):
         self.last_event_bot_y = 0
         self.title = "untitled"
         self.s3_bucket = s3_bucket
+        self.config = CONFIG
+        if user_config:
+            self.config.update(user_config)
 
     def _max_power(self):
         if self.max_ya:
@@ -111,7 +119,7 @@ class LogTimeline(object):
     def _draw_gridline(self, ya, major=False, label=None):
         y = self._y_coord(ya)
         self.pdf.set_line_width(0.5 if major else 0.2)
-        x2 = W - MARGIN if FULL_WIDTH_GRID else MARGIN + GRID_WIDTH
+        x2 = W - MARGIN if self.config.get('FULL_WIDTH_GRID') else GRID_X + GRID_WIDTH
         self.pdf.line(MARGIN + GRID_LABEL_WIDTH, y, x2, y)
         if major and label:
             self._text(MARGIN, y, label, size=YA_LABEL_SIZE)
@@ -125,8 +133,9 @@ class LogTimeline(object):
         return PIXEL_GRID_SIZE * log10(ya) + MARGIN
 
     def _draw_grid(self):
+        if self.config.get('NO_GRID'):
+            return
         self.pdf.set_draw_color(230, 230, 230)
-        # self._draw_gridline(0, major=True, label="Now")
         for power in range(self._min_power(), self._max_power() + 1):
             ya_step_size = 10 ** power
             for step in range(1, 10):
@@ -140,9 +149,9 @@ class LogTimeline(object):
         draws a 3-line segment
         '''
         LINE_WIDTH = EVENT_LABEL_X - GRID_X
-        HORIZ_PCT = .2
-        STAGGER_X1 = GRID_X + HORIZ_PCT * LINE_WIDTH
-        STAGGER_X2 = GRID_X + (1 - HORIZ_PCT) * LINE_WIDTH
+
+        STAGGER_X1 = GRID_X + GRID_WIDTH
+        STAGGER_X2 = GRID_X + LINE_WIDTH - GRID_WIDTH
         WH = .6
         self.pdf.rect(GRID_X - WH/2, y - WH/2, WH, WH, 'F')
         # Horiz 1

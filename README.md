@@ -2,7 +2,7 @@
 
 Python script to generate log-scale PDF timelines from arbitrary event data
 
-![log timeline screenshot](https://github.com/onejgordon/log-timeline/blob/master/static/screenshot.png)
+![log timeline screenshot](https://github.com/onejgordon/log10-timeline/blob/master/static/screenshot.png)
 
 ## Usage
 
@@ -15,7 +15,7 @@ Python script to generate log-scale PDF timelines from arbitrary event data
 
 ### Use the web-generator from the docs site
 
-* Visit http://pages.jgordon.io/log-timeline/
+* Visit http://pages.jgordon.io/log10-timeline/
 
 ## Misc
 
